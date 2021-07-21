@@ -2,6 +2,9 @@
 const taskContainer = document.querySelector(".task__container");
 console.log(taskContainer);
 
+//Global store
+const globalStore = [];
+
 const newCard = ({id, imageUrl, taskTitle, taskType, taskDescription}) => `<div class="col-md-6 col-lg-4">
 <div class="card" id=${id}>
     <div class="card-header d-flex justify-content-end gap-2">
@@ -20,6 +23,20 @@ const newCard = ({id, imageUrl, taskTitle, taskType, taskDescription}) => `<div 
 </div>
 </div>`;
 
+const loadInitialTaskCards = () => {
+    //access localstorage
+    const getInitialData = localStorage.getItem("tasky");
+    if(!getInitialData) return;
+    //convert stringified-object to object
+    const { cards } = JSON.parse(getInitialData);
+    //map around the array to generate HTML card and inject it to DOM
+    cards.map((cardObject) => {
+        const createNewCard = newCard(cardObject);
+        taskContainer.insertAdjacentHTML("beforeend", createNewCard);
+        globalStore.push(cardObject);
+    });
+};
+
 const saveChanges = () => {
     const taskData = {
         id: `${Date.now()}`, // provides unique number for card id = number (in miliseconds)
@@ -29,6 +46,11 @@ const saveChanges = () => {
         taskDescription: document.getElementById("taskdescription").value,
     };
     const createNewCard = newCard(taskData);
+    
     //inserting adjacent html in parent container before end
     taskContainer.insertAdjacentHTML("beforeend", createNewCard);
+
+    globalStore.push(taskData);
+    console.log(globalStore);
+    localStorage.setItem("tasky", {cards: globalStore});
 };

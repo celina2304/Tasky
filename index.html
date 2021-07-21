@@ -15,7 +15,7 @@
         <link rel="stylesheet" href="style.css" />  
         <title>Tasky</title>
     </head>
-    <body>
+    <body onload="loadInitialTaskCards()">
 
         <!-- Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -85,23 +85,7 @@
             <!-- Cards-->
             <section>
                 <div class="row task__container">
-                    <div class="col-md-6 col-lg-4">
-                        <div class="card">
-                            <div class="card-header d-flex justify-content-end gap-2">
-                                <button type="button" class="btn btn-outline-success"><i class="fas fa-pencil-alt"></i></button>
-                                <button type="button" class="btn btn-outline-danger"><i class="fas fa-trash-alt"></i></button>
-                            </div>
-                            <img src="https://www.industrialempathy.com/img/remote/ZiClJf-1920w.jpg" class="card-img-top" alt="card_image" />
-                            <div class="card-body">
-                                <h5 class="card-title">Special title treatment</h5>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                <span class="badge bg-primary">Amazing</span>
-                            </div>
-                            <div class="card-footer text-muted">
-                                <button type="button" class="btn btn-outline-primary float-end">Open task</button>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Cards-->
                 </div>
             </section>
         </div>
