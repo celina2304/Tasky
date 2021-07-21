@@ -3,13 +3,13 @@ const taskContainer = document.querySelector(".task__container");
 console.log(taskContainer);
 
 //Global store
-const globalStore = [];
+let globalStore = [];
 
 const newCard = ({id, imageUrl, taskTitle, taskType, taskDescription}) => `<div class="col-md-6 col-lg-4">
 <div class="card" id=${id}>
     <div class="card-header d-flex justify-content-end gap-2">
         <button type="button" class="btn btn-outline-success"><i class="fas fa-pencil-alt"></i></button>
-        <button type="button" class="btn btn-outline-danger"><i class="fas fa-trash-alt"></i></button>
+        <button type="button" id=${id} class="btn btn-outline-danger" onclick="deleteCard.apply(this, arguments)"><i class="fas fa-trash-alt" id=${id} onclick="deleteCard.apply(this, arguments)"></i></button>
     </div>
     <img src=${imageUrl} class="card-img-top" alt="card_image" />
     <div class="card-body">
@@ -37,6 +37,10 @@ const loadInitialTaskCards = () => {
     });
 };
 
+const updatedLocalStorage = () => {
+    localStorage.setItem("tasky", JSON.stringify({cards: globalStore}));
+};
+
 const saveChanges = () => {
     const taskData = {
         id: `${Date.now()}`, // provides unique number for card id = number (in miliseconds)
@@ -51,6 +55,26 @@ const saveChanges = () => {
     taskContainer.insertAdjacentHTML("beforeend", createNewCard);
 
     globalStore.push(taskData);
-    console.log(globalStore);
-    localStorage.setItem("tasky", {cards: globalStore});
+    updatedLocalStorage();
+};
+
+//delete cards
+const deleteCard = (event) => {
+    //id 
+    event = window.event;
+    const targetID = event.target.id;
+    const tagname = event.target.tagName;
+    // search globalStore array, then remove the object which matches with the id
+    globalStore = globalStore.filter((cardObject) => cardObject.id !== targetID);
+    //access dom and remove elements and inject updated cards
+    updatedLocalStorage();
+    //access dom
+    if(tagname === "BUTTON"){
+        return event.target.parentNode.parentNode.parentNode.parentNode.removeChild(
+            event.target.parentNode.parentNode.parentNode// col-lg-4
+        );
+    }
+    return event.target.parentNode.parentNode.parentNode.parentNode.parentNode.removeChild(
+        event.target.parentNode.parentNode.parentNode.parentNode// col-lg-4
+    );
 };
