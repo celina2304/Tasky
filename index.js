@@ -81,3 +81,74 @@ const deleteCard = (event) => {
         event.target.parentNode.parentNode.parentNode.parentNode// col-lg-4
     );
 };
+
+//edit card
+const editCard = (event) => {
+    event = window.event;
+    const targetID = event.target.id;
+    const tagname = event.target.tagName;
+
+    let parentElement;
+    //parentelement points to card
+    if(tagname === "BUTTON"){
+        parentElement = event.target.parentNode.parentNode;
+    }else{
+        parentElement = event.target.parentNode.parentNode.parentNode;
+    }
+    //access card body which is index 5 of the parent card node
+    //(parent card contains nodes (text, header, footer etc))
+    let taskTitle = parentElement.childNodes[5].childNodes[1];
+    let taskDescription = parentElement.childNodes[5].childNodes[3];
+    let taskType = parentElement.childNodes[5].childNodes[5];
+    let submitButton = parentElement.childNodes[7].childNodes[1];
+
+    taskTitle.setAttribute("contenteditable", "true");
+    taskDescription.setAttribute("contenteditable", "true");
+    taskType.setAttribute("contenteditable", "true");
+    submitButton.innerHTML = "Save Changes";//changes text (open task) -> (save changes)
+    submitButton.setAttribute("onclick","saveEditChanges.apply(this, arguments)");
+};
+
+const saveEditChanges = (event) => {
+    event = window.event;
+    const targetID = event.target.id;
+    const tagname = event.target.tagName;
+
+    let parentElement;
+
+    if(tagname === "BUTTON"){
+        parentElement = event.target.parentNode.parentNode;
+    }else{
+        parentElement = event.target.parentNode.parentNode.parentNode;
+    }
+    let taskTitle = parentElement.childNodes[5].childNodes[1];
+    let taskDescription = parentElement.childNodes[5].childNodes[3];
+    let taskType = parentElement.childNodes[5].childNodes[5];
+    let submitButton = parentElement.childNodes[7].childNodes[1];
+    
+    const updatedData = {
+        taskTitle: taskTitle.innerHTML,
+        taskDescription: taskDescription.innerHTML,
+        taskType: taskType.innerHTML,
+    };
+    globalStore = globalStore.map((task) => {
+        if(task.id === targetID){
+            return {
+                id: task.id,
+                imageUrl: task.imageUrl,
+                taskTitle: updatedData.taskTitle,
+                taskType: updatedData.taskType,
+                taskDescription: updatedData.taskDescription,
+            };
+        }
+        return task;
+    });
+    updatedLocalStorage();
+    
+    //content no longer editable
+    taskTitle.setAttribute("contenteditable", "false");
+    taskDescription.setAttribute("contenteditable", "false");
+    taskType.setAttribute("contenteditable", "false");
+    submitButton.innerHTML = "Open Task";
+    submitButton.removeAttribute("onclick");
+};
