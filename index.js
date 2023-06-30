@@ -60,3 +60,24 @@ const saveChanges = () => {
     globalStore.push(taskData);//push new card data to local storage
     updatedLocalStorage();
 };
+
+//delete cards
+const deleteCard = (event) => {
+    //id 
+    event = window.event;
+    const targetID = event.target.id;//id of card
+    const tagname = event.target.tagName;
+    // search globalStore array, then remove the object which matches with the id
+    globalStore = globalStore.filter((cardObject) => cardObject.id !== targetID);
+    //update localstorage with new cards(excluding deleted card)
+    updatedLocalStorage();
+    //access dom
+    if(tagname === "BUTTON"){
+        return taskContainer.removeChild(
+            event.target.parentNode.parentNode.parentNode// col-lg-4
+        );
+    }
+    return taskContainer.removeChild(
+        event.target.parentNode.parentNode.parentNode.parentNode// col-lg-4
+    );
+};
