@@ -116,6 +116,7 @@ const updatedLocalStorage = () => {
 
 const saveChanges = () => {
   //creating object containing data of modal
+  const isDark = document.body.classList.contains("dark-mode");
   const taskData = {
     id: `${Date.now()}`, // provides unique number for card id = number (in miliseconds)
     imageUrl: document.getElementById("imageurl").value, //only need value not the element
